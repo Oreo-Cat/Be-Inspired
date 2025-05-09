@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be Inspired</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            transition: background-color 0.5s ease;
+            text-align: center;
+            margin: 0;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        #container {
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease;
+            max-width: 90%;
+            min-width: 200px;
+            width: 50%;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            user-select: none;
+        }
+
+        #quote {
+            font-size: 1.2em;
+            margin-bottom: 1em;
+            font-style: italic;
+            color: #333;
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+            width: 100%;
+            text-align: center;
+            transition: opacity 0.5s ease;
+        }
+
+        #emoji {
+            font-size: 3em;
+            margin-bottom: 1em;
+            animation: pulse 1s ease infinite, tilt 0.5s ease-in-out;
+            user-select: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes tilt {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(-7deg); }
+            75% { transform: rotate(7deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        #copyButton {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            cursor: pointer;
+            font-size: 1.5em;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+
+        #copyButton:hover {
+            background-color: #e0e0e0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        #copyButton:active {
+            background-color: #d0d0d0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transform: scale(0.9);
+        }
+
+    	#infoButton {
+        	position: fixed;
+        	bottom: 20px;
+        	right: 20px;
+        	padding: 10px;
+        	border: none;
+        	border-radius: 5px;
+        	background-color: #f0f0f0;
+        	cursor: pointer;
+        	font-size: 1.5em;
+        	transition: background-color 0.3s ease;
+        	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        	user-select: none;
+        	display: flex;
+        	align-items: center;
+        	justify-content: center;
+        	width: 40px;
+        	height: 40px;
+    	}
+
+    	#infoButton:hover {
+        	background-color: #e0e0e0;
+    	}
+
+    	#infoButton:active {
+        	background-color: #d0d0d0;
+        	transform: scale(0.9);
+    	}
+
+    	#infoBox {
+        	position: fixed;
+        	max-width: 300px;
+        	width: 90%;
+        	bottom: 80px;
+        	right: 20px;
+        	background: white;
+        	color: #333;
+        	border: 1px solid #ccc;
+        	border-radius: 10px;
+        	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        	padding: 15px 20px 15px 15px;
+        	z-index: 100;
+        	font-size: 0.95em;
+        	line-height: 1.4em;
+        	opacity: 0;
+        	transform: translateY(20px);
+        	transition: opacity 0.3s ease, transform 0.3s ease;
+        	pointer-events: none;
+    	}
+
+    	#infoBox.visible {
+        	opacity: 1;
+        	transform: translateY(0);
+        	pointer-events: auto;
+    	}
+
+    	#infoBoxClose {
+        	position: absolute;
+        	top: 5px;
+        	right: 10px;
+        	cursor: pointer;
+        	font-weight: bold;
+        	font-size: 1.2em;
+        	color: #666;
+    	}
+
+    	#infoBoxClose:hover {
+        	color: #000;
+    	}
+        #clickText {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #666;
+            font-size: 0.9em;
+            opacity: 1;
+            user-select: none;
+        }
+
+        #quoteCategories {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        #quoteCategories button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+            user-select: none;
+        }
+
+        #quoteCategories button:hover {
+            background-color: #e0e0e0;
+        }
+
+        #quoteCategories button.active {
+            background-color: #d0d0d0;
+            font-weight: bold;
+        }
+
+        @keyframes slideIn {
+          from {
+            transform: translateY(20px);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+
+        #quote {
+            animation: slideIn 0.5s ease-out, fadeIn 0.5s ease forwards;
+        }
+        #emoji {
+             animation: pulse 1s ease infinite, tilt 0.5s ease-in-out, slideIn 0.5s ease-out;
+        }
+
+    </style>
+</head>
+<body onclick="generateContent()">
+    <div id="quoteCategories">
+        <button data-category="all" class="active">All</button>
+        <button data-category="motivational">Motivational</button>
+        <button data-category="love">Love</button>
+        <button data-category="funny">Funny</button>
+    </div>
+    <div id="container">
+        <div id="emoji"></div>
+        <div id="quote"></div>
+    </div>
+    <button id="copyButton">📋</button>
+    <button id="infoButton">❓</button>
+    <p id="clickText">Click to generate new quote</p>
+    <div id="infoBox">
+        <div id="infoBoxClose">✖</div>
+        <p>
+            <strong>Hey there!</strong><br><br>
+            Just so you know, Google Gemini 2.0 Flash and wrote most of the code for this website (With a bit of help from me and ChatGPT). I wanted to show just how advanced AI has become today. Despite this, it still took nearly 100 prompts to get it just right!<br><br>
+            We made this site to give you a little boost of inspiration.<br><br>
+            <em>And remember... "The best inspiration is often found in the journey of creation itself!" ✨</em>
+        </p>
+    </div>
+    <script>
+        const quotes = {
+            "all": [
+                "The only way to do great work is to love what you do. - Steve Jobs",
+                "The future belongs to those who believe in the beauty of their dreams. - Eleanor Roosevelt",
+                "Strive not to be a success, but rather to be of value. - Albert Einstein",
+                "It always seems impossible until it's done. - Nelson Mandela",
+                "The best and most beautiful things in the world cannot be seen or even touched - they must be felt with the heart. - Helen Keller",
+                "Life is what happens when you're busy making other plans. - John Lennon",
+                "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment. - Ralph Waldo Emerson",
+                "The only limit to our realization of tomorrow will be our doubts of today. - Franklin D. Roosevelt",
+                "The journey of a thousand miles begins with a single step. - Lao Tzu",
+                "That which does not kill us makes us stronger. - Friedrich Nietzsche",
+                "The mind is everything. What you think you become. - Buddha",
+                "The best way to predict the future is to invent it. - Alan Kay",
+                "Imagination is more important than knowledge. - Albert Einstein",
+                "It is never too late to be what you might have been. - George Eliot",
+                "The greatest glory in living lies not in never falling, but in rising every time we fall. - Nelson Mandela",
+                "In the end, it's not the years in your life that count. It's the life in your years. - Abraham Lincoln",
+                "The only impossible journey is the one you never begin. - Tony Robbins",
+                "Believe you can and you're halfway there. - Theodore Roosevelt",
+                "What lies behind you and what lies in front of you, pales in comparison to what lies inside of you. - Ralph Waldo Emerson",
+                "It is during our darkest moments that we must focus to see the light. - Aristotle",
+                "Happiness is not by chance, but by choice. - Jim Rohn",
+                "You are never too old to set another goal or to dream a new dream. - C.S. Lewis",
+                "The only way to do great work is to love what you do. - Steve Jobs",
+                "The mind is everything. What you think you become. - Buddha",
+                "Strive not to be a success, but rather to be of value. - Albert Einstein",
+                "Life is like riding a bicycle. To keep your balance, you must keep moving. - Albert Einstein",
+                "The best preparation for tomorrow is doing your best today. - H. Jackson Brown Jr.",
+                "If you can dream it, you can achieve it. - Zig Ziglar",
+                "It does not matter how slowly you go as long as you do not stop. - Confucius",
+                "Our greatest weakness lies in giving up. The most certain way to succeed is always to try just one more time. - Thomas A. Edison",
+                "The difference between ordinary and extraordinary is that little extra. - Jimmy Johnson",
+                "The best revenge is massive success. - Frank Sinatra",
+                "The hard days are what make you stronger. - Ally Raisman",
+                "It is better to fail in originality than to succeed in imitation. - Herman Melville",
+                "What you get by achieving your goals is not as important as what you become by achieving your goals. - Zig Ziglar",
+                "The most common way people give up their power is by thinking they don't have any. - Alice Walker",
+                "You miss 100% of the shots you don't take. - Wayne Gretzky",
+                "The only thing standing between you and your goal is the story you keep telling yourself as to why you can't achieve it. - Jordan Belfort",
+                "I've learned that people will forget what you said, people will forget what you did, but people will never forget how you made them feel. - Maya Angelou",
+                "The best way to spread Christmas cheer is singing loud for all to hear. - Buddy the Elf",
+            ],
+            "motivational": [
+                "Strive not to be a success, but rather to be of value. - Albert Einstein",
+                "It always seems impossible until it's done. - Nelson Mandela",
+                "The only limit to our realization of tomorrow will be our doubts of today. - Franklin D. Roosevelt",
+                "The journey of a thousand miles begins with a single step. - Lao Tzu",
+                "That which does not kill us makes us stronger. - Friedrich Nietzsche",
+                "The mind is everything. What you think you become. - Buddha",
+                "The best way to predict the future is to invent it. - Alan Kay",
+                "Believe you can and you're halfway there. - Theodore Roosevelt",
+                "The only impossible journey is the one you never begin. - Tony Robbins",
+                "The greatest glory in living lies not in never falling, but in rising every time we fall. - Nelson Mandela",
+                "You are never too old to set another goal or to dream a new dream. - C.S. Lewis",
+                "The only way to do great work is to love what you do. - Steve Jobs",
+                "The sun himself is weak when he first rises, and gathers strength and courage as the day gets on. - Charles Dickens",
+                "The best preparation for tomorrow is doing your best today. - H. Jackson Brown Jr.",
+                "If you can dream it, you can achieve it. - Zig Ziglar",
+                "It does not matter how slowly you go as long as you do not stop. - Confucius",
+                "Our greatest weakness lies in giving up. The most certain way to succeed is always to try just one more time. - Thomas A. Edison",
+                "The difference between ordinary and extraordinary is that little extra. - Jimmy Johnson",
+                "Don't watch the clock; do what it does. Keep going. - Sam Levenson",
+                "The obstacle is the way. - Marcus Aurelius",
+                "The hard days are what make you stronger. - Ally Raisman",
+                "What you get by achieving your goals is not as important as what you become by achieving your goals. - Zig Ziglar",
+                "You miss 100% of the shots you don't take. - Wayne Gretzky",
+                "The only thing standing between you and your goal is the story you keep telling yourself as to why you can't achieve it. - Jordan Belfort",
+            ],
+            "love": [
+                "The best and most beautiful things in the world cannot be seen or even touched - they must be felt with the heart. - Helen Keller",
+                "Life is what happens when you're busy making other plans. - John Lennon",
+                "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment. - Ralph Waldo Emerson",
+                "What lies behind you and what lies in front of you, pales in comparison to what lies inside of you. - Ralph Waldo Emerson",
+                "The best and most beautiful things in the world cannot be seen or even touched - they must be felt with the heart. - Helen Keller",
+                "In the end, it's not the years in your life that count. It's the life in your years. - Abraham Lincoln",
+                "Love is not about possession, but appreciation. - Unknown",
+                "The greatest happiness of life is the conviction that we are loved; loved for ourselves, or rather, loved in spite of ourselves. - Victor Hugo",
+                "To love and be loved is to feel the sun from both sides. - David Viscott",
+                "The best thing to hold onto in life is each other. - Audrey Hepburn",
+            ],
+            "funny": [
+                "All that glitters is not gold. - William Shakespeare",
+                "To be or not to be, that is the question. - William Shakespeare",
+                "Every child is an artist. The problem is how to remain an artist once he grows up. - Pablo Picasso",
+                "The greatest glory in living lies not in never falling, but in rising every time we fall. - Nelson Mandela",
+                "I always wanted to be somebody, but now I realise I should have been more specific. - Lily Tomlin",
+                "The only thing I know is that I know nothing. - Socrates",
+                "I am so clever that sometimes I don't understand a single word of what I am saying. - Oscar Wilde",
+                "The best way to spread Christmas cheer is singing loud for all to hear. - Buddy the Elf",
+            ]
+        };
+
+        const emojiMapping = {
+            "The only way to do great work is to love what you do. - Steve Jobs": "❤️",
+            "The future belongs to those who believe in the beauty of their dreams. - Eleanor Roosevelt": "✨",
+            "Strive not to be a success, but rather to be of value. - Albert Einstein": "💯",
+            "It always seems impossible until it's done. - Nelson Mandela": "💪",
+            "The best and most beautiful things in the world cannot be seen or even touched - they must be felt with the heart. - Helen Keller": "💖",
+            "Life is what happens when you're busy making other plans. - John Lennon": "🎶",
+            "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment. - Ralph Waldo Emerson": "🌟",
+            "The only limit to our realization of tomorrow will be our doubts of today. - Franklin D. Roosevelt": "🚀",
+            "The journey of a thousand miles begins with a single step. - Lao Tzu": "👣",
+            "That which does not kill us makes us stronger. - Friedrich Nietzsche": "🔥",
+            "The mind is everything. What you think you become. - Buddha": "🧠",
+            "The best way to predict the future is to invent it. - Alan Kay": "💡",
+            "Imagination is more important than knowledge. - Albert Einstein": "🎨",
+            "It is never too late to be what you might have been. - George Eliot": "🕰️",
+            "The greatest glory in living lies not in never falling, but in rising every time we fall. - Nelson Mandela": "⬆️",
+            "In the end, it's not the years in your life that count. It's the life in your years. - Abraham Lincoln": "⏳",
+            "The only impossible journey is the one you never begin. - Tony Robbins": "🛤️",
+            "Believe you can and you're halfway there. - Theodore Roosevelt": "👍",
+            "What lies behind you and what lies in front of you, pales in comparison to what lies inside of you. - Ralph Waldo Emerson": "👁️",
+            "It is during our darkest moments that we must focus to see the light. - Aristotle": "💡",
+            "Happiness is not by chance, but by choice. - Jim Rohn": "😃",
+            "You are never too old to set another goal or to dream a new dream. - C.S. Lewis": "🎯",
+            "The only way to do great work is to love what you do. - Steve Jobs": "❤️",
+            "The mind is everything. What you think you become. - Buddha": "🧠",
+            "Strive not to be a success, but rather to be of value. - Albert Einstein": "💯",
+            "Life is like riding a bicycle. To keep your balance, you must keep moving. - Albert Einstein": "🚴",
+            "The best preparation for tomorrow is doing your best today. - H. Jackson Brown Jr.": "📅",
+            "If you can dream it, you can achieve it. - Zig Ziglar": "🏆",
+            "It does not matter how slowly you go as long as you do not stop. - Confucius": "🐢",
+            "Our greatest weakness lies in giving up. The most certain way to succeed is always to try just one more time. - Thomas A. Edison": "💡",
+            "The difference between ordinary and extraordinary is that little extra. - Jimmy Johnson": "➕",
+            "The best revenge is massive success. - Frank Sinatra": "💰",
+            "The hard days are what make you stronger. - Ally Raisman": "💪",
+             "It is better to fail in originality than to succeed in imitation. - Herman Melville": "💯",
+            "What you get by achieving your goals is not as important as what you become by achieving your goals. - Zig Ziglar": "🎯",
+            "The most common way people give up their power is by thinking they don't have any. - Alice Walker": "✊",
+            "You miss 100% of the shots you don't take. - Wayne Gretzky": "🏒",
+            "The only thing standing between you and your goal is the story you keep telling yourself as to why you can't achieve it. - Jordan Belfort": "🗣️",
+            "I've learned that people will forget what you said, people will forget what you did, but people will never forget how you made them feel. - Maya Angelou": "🤗",
+            "Love is not about possession, but appreciation. - Unknown": "🫶",
+            "The greatest happiness of life is the conviction that we are loved; loved for ourselves, or rather, loved in spite of ourselves. - Victor Hugo": "🥰",
+            "To love and be loved is to feel the sun from both sides. - David Viscott": "☀️",
+            "The best thing to hold onto in life is each other. - Audrey Hepburn": "🫂",
+            "I always wanted to be somebody, but now I realise I should have been more specific. - Lily Tomlin": "🤪",
+            "The only thing I know is that I know nothing. - Socrates": "🤷",
+            "I am so clever that sometimes I don't understand a single word of what I am saying. - Oscar Wilde": "🧐",
+            "The best way to spread Christmas cheer is singing loud for all to hear. - Buddy the Elf": "🧝",
+        };
+
+        let currentQuoteElement = null;
+        let isMouseMoving = false;
+        let currentCategory = "all";
+        let previousQuotes = [];
+
+        function getRandomQuote(category) {
+            const categoryQuotes = quotes[category] || quotes["all"];
+            let chosenQuote;
+
+            if (categoryQuotes.length <= previousQuotes.length) {
+                previousQuotes = [];
+            }
+
+            do {
+                chosenQuote = categoryQuotes[Math.floor(Math.random() * categoryQuotes.length)];
+            } while (previousQuotes.includes(chosenQuote));
+
+            previousQuotes.push(chosenQuote);
+            localStorage.setItem('previousQuotes', JSON.stringify(previousQuotes));
+            return chosenQuote;
+        }
+
+        function generateContent() {
+            const quoteElement = document.getElementById("quote");
+            const emojiElement = document.getElementById("emoji");
+            const container = document.getElementById("container");
+            const body = document.body;
+
+            const randomQuote = getRandomQuote(currentCategory);
+            const emoji = emojiMapping[randomQuote] || "🌈";
+
+            const oldQuoteElement = currentQuoteElement;
+            currentQuoteElement = quoteElement;
+
+            quoteElement.textContent = randomQuote;
+            emojiElement.textContent = emoji;
+
+            const newHeight = quoteElement.offsetHeight + emojiElement.offsetHeight + (2 * 20);
+
+            quoteElement.style.opacity = 0;
+
+            if (oldQuoteElement) {
+                container.style.height = `${newHeight}px`;
+                container.style.transition = 'height 0.5s ease-in-out';
+
+                setTimeout(() => {
+                    quoteElement.textContent = randomQuote;
+                    quoteElement.style.opacity = 1;
+                }, 300);
+            } else {
+                container.style.height = `${newHeight}px`;
+                container.style.transition = 'height 0.5s ease-in-out';
+                quoteElement.style.opacity = 1;
+            }
+
+            const randomColor = `hsl(${Math.random() * 360}, 70%, 80%)`;
+            body.style.backgroundColor = randomColor;
+            body.style.transition = 'background-color 0.5s ease';
+
+            quoteElement.style.animation = 'none';
+            setTimeout(() => {
+                quoteElement.style.animation = 'slideIn 0.5s ease-out, fadeIn 0.5s ease forwards';
+                emojiElement.style.animation = 'pulse 1s ease infinite, tilt 0.5s ease-in-out, slideIn 0.5s ease-out';
+            }, 0);
+        }
+
+        document.addEventListener('mousemove', (event) => {
+            isMouseMoving = true;
+            const container = document.getElementById("container");
+            const rect = container.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            const maxTiltX = 20;
+            const maxTiltY = 20;
+
+            const tiltX = (y - rect.height / 2) / (rect.height / 2) * maxTiltX;
+            const tiltY = (x - rect.width / 2) / (rect.width / 2) * maxTiltY;
+            const depth = 0;
+
+            const clampedTiltX = Math.max(-maxTiltX, Math.min(maxTiltX, tiltX));
+            const clampedTiltY = Math.max(-maxTiltY, Math.min(maxTiltY, tiltY));
+
+            container.style.transform = `perspective(500px) translateZ(${depth}px) rotateX(${-clampedTiltX}deg) rotateY(${clampedTiltY}deg)`;
+            container.style.transition = 'transform 0.1s ease-out, box-shadow 0.1s ease-out';
+            container.style.boxShadow = `0 ${Math.abs(clampedTiltX) * 3}px ${Math.abs(clampedTiltY) * 3}px rgba(0, 0, 0, 0.3)`;
+        });
+
+        document.getElementById("container").addEventListener('mouseleave', () => {
+            isMouseMoving = false;
+            const container = document.getElementById("container");
+            container.style.transform = 'perspective(500px) translateZ(0px) rotate(0deg)';
+            container.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
+        });
+
+        document.getElementById('copyButton').addEventListener('click', (event) => {
+            event.stopPropagation();
+            const quoteText = document.getElementById('quote').textContent;
+            navigator.clipboard.writeText(quoteText).then(() => {
+                const copyButton = document.getElementById('copyButton');
+                copyButton.style.backgroundColor = '#90ee90';
+                copyButton.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    copyButton.style.backgroundColor = '#f0f0f0';
+                    copyButton.style.transform = 'scale(1)';
+                }, 500);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                alert('Failed to copy quote. Please copy manually.');
+            });
+        });
+
+        document.querySelectorAll('#quoteCategories button').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.stopPropagation();
+                document.querySelectorAll('#quoteCategories button').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentCategory = this.dataset.category;
+                generateContent();
+            });
+        });
+
+        if (localStorage.getItem('previousQuotes')) {
+            previousQuotes = JSON.parse(localStorage.getItem('previousQuotes'));
+        }
+        generateContent();
+
+    	// Info button toggle
+    	const infoButton = document.getElementById('infoButton');
+    	const infoBox = document.getElementById('infoBox');
+    	const closeInfo = document.getElementById('infoBoxClose');
+
+    	infoButton.addEventListener('click', (e) => {
+        	e.stopPropagation();
+        	infoBox.classList.toggle('visible');
+    	});
+
+    	closeInfo.addEventListener('click', (e) => {
+        	e.stopPropagation();
+        	infoBox.classList.remove('visible');
+    	});
+
+    	document.body.addEventListener('click', () => {
+        	infoBox.classList.remove('visible');
+    	});
+
+    	infoBox.addEventListener('click', (e) => {
+        	e.stopPropagation(); // Prevent it from closing if the box itself is clicked
+    	});
+    </script>
+</body>
+</html>
